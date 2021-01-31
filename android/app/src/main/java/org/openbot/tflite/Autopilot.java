@@ -28,13 +28,17 @@ public abstract class Autopilot extends Network {
 
   public static Autopilot create(Activity activity, Model model, Device device, int numThreads)
       throws IOException {
-    return new AutopilotFloat(activity, model, device, numThreads);
+    switch (model) {
+      case AUTOPILOT_F:
+        return new AutopilotFloat(activity, device, numThreads);
+      default:
+        return new AutopilotFloat(activity, device, numThreads);
+    }
   }
 
   /** Initializes a {@code Autopilot}. */
-  protected Autopilot(Activity activity, Model model, Device device, int numThreads)
-      throws IOException {
-    super(activity, model, device, numThreads);
+  protected Autopilot(Activity activity, Device device, int numThreads) throws IOException {
+    super(activity, device, numThreads);
     indicatorBuffer = ByteBuffer.allocateDirect(4);
     indicatorBuffer.order(ByteOrder.nativeOrder());
     LOGGER.d("Created a Tensorflow Lite Autopilot.");

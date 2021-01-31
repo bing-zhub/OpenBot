@@ -49,6 +49,7 @@
     <string-array name="control_modes">
         <item>Gamepad</item>
         <item>Phone</item>
+        <item>MQTT</item>
 <!--        <item>WebRTC</item>-->
     </string-array>
 
@@ -89,6 +90,7 @@
     <string name="_1">1</string>
     <string name="settings">Settings</string>
     <string-array name="speed_modes">
+        <item>Turtle</item>
         <item>Slow</item>
         <item>Normal</item>
         <item>Fast</item>

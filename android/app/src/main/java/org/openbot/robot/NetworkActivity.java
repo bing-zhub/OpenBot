@@ -17,8 +17,6 @@ limitations under the License.
 
 package org.openbot.robot;
 
-import static android.widget.Toast.*;
-
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -36,16 +34,16 @@ import android.util.TypedValue;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import org.openbot.R;
-import org.openbot.common.Enums.ControlMode;
-import org.openbot.common.Enums.LogMode;
+import org.openbot.common.Enums.*;
 import org.openbot.customview.OverlayView;
 import org.openbot.customview.OverlayView.DrawCallback;
 import org.openbot.env.BorderedText;
@@ -54,8 +52,8 @@ import org.openbot.env.ImageUtils;
 import org.openbot.env.Logger;
 import org.openbot.tflite.Autopilot;
 import org.openbot.tflite.Detector;
-import org.openbot.tflite.Model;
 import org.openbot.tflite.Network.Device;
+import org.openbot.tflite.Network.Model;
 import org.openbot.tracking.MultiBoxTracker;
 
 /**
@@ -232,13 +230,12 @@ public class NetworkActivity extends CameraActivity implements OnImageAvailableL
               }
 
               tracker.trackResults(mappedRecognitions, currFrameNum);
-              controllerHandler.handleDriveCommand(tracker.updateTarget());
+              vehicle.setControl(tracker.updateTarget());
               trackingOverlay.postInvalidate();
             } else if (autoPilot != null) {
               LOGGER.i("Running autopilot on image " + currFrameNum);
               final long startTime = SystemClock.elapsedRealtime();
-              controllerHandler.handleDriveCommand(
-                  autoPilot.recognizeImage(croppedBitmap, vehicle.getIndicator()));
+              vehicle.setControl(autoPilot.recognizeImage(croppedBitmap, vehicle.getIndicator()));
               lastProcessingTimeMs = SystemClock.elapsedRealtime() - startTime;
             }
 
@@ -247,6 +244,8 @@ public class NetworkActivity extends CameraActivity implements OnImageAvailableL
             if (loggingEnabled) {
               sendInferenceTimeToSensorService(currFrameNum, lastProcessingTimeMs);
             }
+
+            updateVehicleState();
           });
     }
 
@@ -262,37 +261,57 @@ public class NetworkActivity extends CameraActivity implements OnImageAvailableL
         });
   }
 
-  protected void sendVehicleControl() {
+  protected void updateVehicleState() {
+
+    float left;
+    float right;
 
     // Log controls
     if (loggingEnabled) {
       runInBackground(this::sendControlToSensorService);
     }
 
-    // Send control to vehicle
-    vehicle.sendControl();
+    if (noiseEnabled) {
+      left = vehicle.getNoisyControl().getLeft();
+      right = vehicle.getNoisyControl().getRight();
+      sendNoisyControlToVehicle();
+    } else {
+      left = vehicle.getControl().getLeft();
+      right = vehicle.getControl().getRight();
+      sendControlToVehicle();
+    }
 
     // Update GUI
     runOnUiThread(
-        () -> {
-          Log.i("display_ctrl", "runnable");
-          if (controlValueTextView != null)
-            controlValueTextView.setText(
-                String.format(
-                    Locale.US,
-                    "%.0f,%.0f",
-                    vehicle.getControl().getLeft(),
-                    vehicle.getControl().getRight()));
+        new Runnable() {
+          @Override
+          public void run() {
+            Log.i("display_ctrl", "runnable");
+            if (controlValueTextView != null)
+              controlValueTextView.setText(String.format(Locale.US, "%.0f,%.0f", left, right));
+          }
         });
+  }
+
+  private Timer noiseTimer;
+
+  private class NoiseTask extends TimerTask {
+    @Override
+    public void run() {
+      vehicle.applyNoise();
+      updateVehicleState();
+    }
   }
 
   protected void toggleNoise() {
     noiseEnabled = !noiseEnabled;
     BotToControllerEventBus.emitEvent(createStatus("NOISE", noiseEnabled));
     if (noiseEnabled) {
-      vehicle.startNoise();
-    } else vehicle.stopNoise();
-    sendVehicleControl();
+      noiseTimer = new Timer();
+      NoiseTask noiseTask = new NoiseTask();
+      noiseTimer.schedule(noiseTask, 0, 50); // no delay 50ms intervals
+    } else noiseTimer.cancel();
+    updateVehicleState();
   }
 
   @Override
@@ -315,7 +334,8 @@ public class NetworkActivity extends CameraActivity implements OnImageAvailableL
           () -> {
             try {
               TimeUnit.MILLISECONDS.sleep(lastProcessingTimeMs);
-              controllerHandler.handleDriveCommand(0.f, 0.f);
+              vehicle.setControl(0, 0);
+              updateVehicleState();
               runOnUiThread(
                   () -> {
                     inferenceTimeTextView.setText(R.string.time_ms);
@@ -406,10 +426,8 @@ public class NetworkActivity extends CameraActivity implements OnImageAvailableL
       cropToFrameTransform = new Matrix();
       frameToCropTransform.invert(cropToFrameTransform);
 
-    } catch (IllegalArgumentException | IOException e) {
-      String msg = "Failed to create network.";
-      LOGGER.e(e, msg);
-      Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    } catch (IOException e) {
+      LOGGER.e(e, "Failed to create detector.");
     }
   }
 
@@ -433,45 +451,37 @@ public class NetworkActivity extends CameraActivity implements OnImageAvailableL
   public boolean dispatchKeyEvent(KeyEvent event) {
     // Check that the event came from a game controller
     if ((event.getSource() & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD
+        && event.getAction() == KeyEvent.ACTION_UP
         && controlMode == ControlMode.GAMEPAD) {
-      // Only handle key once (when released)
-      if (event.getAction() == KeyEvent.ACTION_UP) {
-        switch (event.getKeyCode()) {
-          case KeyEvent.KEYCODE_BUTTON_A: // x
-            controllerHandler.handleLogging();
-            break;
-          case KeyEvent.KEYCODE_BUTTON_X: // square
-            controllerHandler.handleIndicatorLeft();
-            break;
-          case KeyEvent.KEYCODE_BUTTON_Y: // triangle
-            controllerHandler.handleIndicatorStop();
-            break;
-          case KeyEvent.KEYCODE_BUTTON_B: // circle
-            controllerHandler.handleIndicatorRight();
-            break;
-          case KeyEvent.KEYCODE_BUTTON_START: // options
-            controllerHandler.handleNoise();
-            break;
-          case KeyEvent.KEYCODE_BUTTON_L1:
-            controllerHandler.handleDriveMode();
-            break;
-          case KeyEvent.KEYCODE_BUTTON_R1:
-            controllerHandler.handleNetwork();
-            break;
-          case KeyEvent.KEYCODE_BUTTON_THUMBL:
-            controllerHandler.handleSpeedUp();
-            break;
-          case KeyEvent.KEYCODE_BUTTON_THUMBR:
-            controllerHandler.handleSpeedDown();
-            break;
-          default:
-            //               makeText(this,"Key " + event.getKeyCode() + " not recognized",
-            //                       LENGTH_SHORT).show();
-            break;
-        }
+      switch (event.getKeyCode()) {
+        case KeyEvent.KEYCODE_BUTTON_A:
+          controllerHandler.handleLogging();
+          return true;
+        case KeyEvent.KEYCODE_BUTTON_B:
+          controllerHandler.handleIndicatorLeft();
+          return true;
+        case KeyEvent.KEYCODE_BUTTON_Y:
+          controllerHandler.handleIndicatorStop();
+          return true;
+        case KeyEvent.KEYCODE_BUTTON_X:
+          controllerHandler.handleIndicatorRight();
+          return true;
+        case KeyEvent.KEYCODE_BUTTON_START:
+          controllerHandler.handleNoise();
+          return true;
+        case KeyEvent.KEYCODE_BUTTON_L1:
+          controllerHandler.handleDriveMode();
+          return true;
+        case KeyEvent.KEYCODE_BUTTON_R1:
+          controllerHandler.handleNetwork();
+          return true;
+        default:
+          // Toast.makeText(this,"Key " + event.getKeyCode() + " not recognized",
+          // Toast.LENGTH_SHORT).show();
+          break;
       }
-      return true;
     }
+
     return super.dispatchKeyEvent(event);
   }
 }

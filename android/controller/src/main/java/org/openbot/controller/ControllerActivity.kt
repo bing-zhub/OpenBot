@@ -30,16 +30,14 @@ import org.openbot.controller.utils.Utils
 
 class ControllerActivity : /*AppCompat*/ Activity() { // for some reason AppCompatActivity gives errors in the IDE, but it does compile,
     private val TAG = "ControllerActivity"
+    private var buttonsVisible: Boolean = false
     private lateinit var binding: ActivityFullscreenBinding
-    private lateinit var screenManager: ScreenManager
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFullscreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        screenManager = ScreenManager(binding)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -49,10 +47,60 @@ class ControllerActivity : /*AppCompat*/ Activity() { // for some reason AppComp
         binding.leftDriveControl.setDirection(DualDriveSeekBar.LeftOrRight.LEFT)
         binding.rightDriveControl.setDirection(DualDriveSeekBar.LeftOrRight.RIGHT)
 
-        screenManager.hideControls()
+        hideControls()
         hideSystemUI()
 
+        binding.mainScreen.setupDoubleTap(::toggleButtons)
         BotDataListener.init()
+    }
+
+    private fun toggleButtons() {
+        if (buttonsVisible) {
+            hideButtons()
+        } else {
+            showButtons()
+        }
+    }
+
+    private fun hideButtons() {
+        binding.botSetupButtons.hide()
+        showSliders()
+        buttonsVisible = false
+    }
+
+    private fun hideSliders() {
+        binding.driveModeControls.hide()
+    }
+
+    private fun showSliders() {
+        binding.driveModeControls.show()
+    }
+
+    private fun showButtons(milliseconds: Long) {
+        showButtons()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            hideButtons()
+        }, milliseconds)
+    }
+
+    private fun showButtons() {
+        binding.botSetupButtons.show()
+
+        hideSliders()
+        buttonsVisible = true
+    }
+
+    private fun hideControls() {
+        binding.mainScreen.hide()
+        binding.splashScreen.show()
+    }
+
+    private fun showControls() {
+        binding.splashScreen.hide()
+        binding.mainScreen.show()
+
+        showButtons(3000)
     }
 
     private fun createAppEventsSubscription(): Disposable =
@@ -64,24 +112,24 @@ class ControllerActivity : /*AppCompat*/ Activity() { // for some reason AppComp
                         when (it) {
                             EventProcessor.ProgressEvents.ConnectionSuccessful -> {
                                 Utils.beep()
-                                screenManager.showControls()
+                                showControls()
                             }
                             EventProcessor.ProgressEvents.ConnectionStarted -> {
                             }
                             EventProcessor.ProgressEvents.ConnectionFailed -> {
-                                screenManager.hideControls()
+                                hideControls()
                             }
                             EventProcessor.ProgressEvents.StartAdvertising -> {
-                                screenManager.hideControls()
+                                hideControls()
                             }
                             EventProcessor.ProgressEvents.Disconnected -> {
-                                screenManager.hideControls()
+                                hideControls()
                                 NearbyConnection.connect(this)
                             }
                             EventProcessor.ProgressEvents.StopAdvertising -> {
                             }
                             EventProcessor.ProgressEvents.AdvertisingFailed -> {
-                                screenManager.hideControls()
+                                hideControls()
                             }
                         }
                     }

@@ -7,7 +7,6 @@ task downloadNetworks(type: Download) {
     src
     dest project.ext.ASSET_DIR + '/networks'
     onlyIfModified true
-    overwrite false
 }
 
 preBuild.dependsOn downloadNetworks

@@ -168,6 +168,7 @@ public class UsbConnection {
 
   private void onSerialDataReceived(String data) {
     // Add whatever you want here
+    MQTTController.publishToServer(data);
     LOGGER.i("Serial data received: " + data);
     localBroadcastManager.sendBroadcast(
         new Intent(Constants.USB_ACTION_DATA_RECEIVED)
@@ -193,11 +194,9 @@ public class UsbConnection {
   }
 
   public void send(String msg) {
-    if (isOpen() && !isBusy()) {
-      busy = true;
-      serialDevice.write(msg.getBytes(UTF_8));
-      busy = false;
-    }
+    busy = true;
+    serialDevice.write(msg.getBytes(UTF_8));
+    busy = false;
   }
 
   public boolean isOpen() {

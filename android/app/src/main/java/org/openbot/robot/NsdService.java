@@ -9,8 +9,7 @@ import android.util.Log;
 
 class NsdService {
 
-  private static final String TAG = "NSD";
-  private static final String SERVICE_TYPE = "_http._tcp.";
+  private final String SERVICE_TYPE = "_http._tcp.";
 
   private final DiscoveryListener mDiscoveryListener =
       new DiscoveryListener() {
@@ -23,14 +22,10 @@ class NsdService {
           // A service was found!  Do something with it.
           String name = service.getServiceName();
           String type = service.getServiceType();
-          Log.d(TAG, "Service Name=" + name);
-          Log.d(TAG, "Service Type=" + type);
+          Log.d("NSD", "Service Name=" + name);
+          Log.d("NSD", "Service Type=" + type);
           if (type.equals(SERVICE_TYPE) && name.contains("Openbot")) {
-            try {
-              mNsdManager.resolveService(service, mResolveListener);
-            } catch (IllegalArgumentException e) {
-              Log.w(TAG, e);
-            }
+            mNsdManager.resolveService(service, mResolveListener);
           }
         }
 
@@ -59,13 +54,13 @@ class NsdService {
 
   public void start(Context context, ResolveListener resolveListener) {
     this.mResolveListener = resolveListener;
-    Log.d(TAG, "Start discovery");
+    Log.d("NSD", "Start discovery");
     mNsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
     mNsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
   }
 
   public void stop() {
-    Log.d(TAG, "Stop discovery");
+    Log.d("NSD", "Stop discovery");
     mNsdManager.stopServiceDiscovery(mDiscoveryListener);
   }
 }
