@@ -1,232 +1,174 @@
-# OpenBot: Robot Body
+# OpenBot 中文版说明
 
 <p align="center">
-  <span>English</span> |
-  <a href="README_CN.md">简体中文</a>
+  <a href="README.md">English</a> |
+  <span>简体中文</span>
 </p>
 
-We have designed a body for a wheeled robot which relies on low-cost, readily available hobby hardware.
+我们为轮式机器人设计了一个车身，该车身依赖于低成本，随时可用的业余爱好硬件。
+
 ![Assembly](../docs/images/assembly.gif)
 
-## Chassis
+## 3D打印机身
 
-### 3D printing
+您将需要打印以下部分用来组装您的OpenBot机器车。
 
-You will need to print the following parts in order to build your OpenBot.
+1) 车身底部 ([STL](cad/body_bottom.stl), [STEP](cad/body_bottom.step))
+2) 车身顶部 ([STL](cad/body_top.stl), [STEP](cad/body_top.step))
+3) 手机支架底部 ([STL](cad/phone_mount_bottom.stl), [STEP](cad/phone_mount_bottom.step))
+4) 手机支架顶部 ([STL](cad/phone_mount_top.stl), [STEP](cad/phone_mount_top.step))
 
-1) body_bottom ([STL](cad/regular_body/body_bottom.stl), [STEP](cad/regular_body/body_bottom.step))
-2) body_top ([STL](cad/regular_body/body_top.stl), [STEP](cad/regular_body/body_top.step))
-3) phone_mount_bottom ([STL](cad/phone_mount/phone_mount_bottom.stl), [STEP](cad/phone_mount/phone_mount_bottom.step))
-4) phone_mount_top ([STL](cad/phone_mount/phone_mount_top.stl), [STEP](cad/phone_mount/phone_mount_top.step))
+对于上述零件，你的构建板至少需要240mmx150mm。
 
-For the above parts, your build plate needs to be at least 240mmx150mm.
+由于很多常见的3D打印机的构建体积较小，我们还制作了一个[slim body](cad/slim_body/README_CN.md)，它适合在220mmx220mm的构建板上以45度的角度进行构建。
 
-Since a lot of common 3D printers have a smaller build volume, we have also made a [slim body](cad/slim_body/README.md) which fits on a 220mmx220mm build plate at 45 degrees.
+对于在3D打印机上打印更小的构建量，还有一个[glueable body](cad/glue_body/README_CN.md)，适合在150mmx140mm的构建板上打印。感谢@sloretz。
 
-For printing on 3D printers with even smaller build volumes, there is also a [glueable body](cad/glue_body/README.md) which fits on a 150mmx140mm build plate. Thanks to @sloretz.
+在Ultimaker S5上，我们通过以下设置获得了良好的效果：
 
-On an Ultimaker S5, we achieved good results with the following settings:
+- 层高：0.2mm
+- 壁厚：1.5mm
+- 填充密度：20％
+- 填充图案：网格
+- 打印速度80毫米/秒
+- 无支持
 
-- layer height: 0.2mm
-- wall thickness: 1.5mm
-- infill density: 20%
-- infill pattern: grid
-- print speed 80 mm/s
-- no support
+我们能够使用PLA，ABS和CPE打印机箱。 根据我们的经验，打印设置不受打印设置的影响很大。 但是，如果您有耐心，则打印速度较慢且层高度较小的纸张会改善打印质量。 另外，添加支撑结构可以改善打印效果，但是添加的支撑之后需要进行额外的工作才能去除。
 
-We were able to print the chassis with PLA, ABS and CPE. In our experience the print was not affected very much by the print settings. However, if you have the patience, printing slower and with smaller layer height will improve the print. Also adding a support structure can improve the print, but it will require additional work to remove afterwards.
+中国用户可以在淘宝找商家打印。注意以下事项：
 
-Before you proceed with the build, you may need to clean the 3D print.
-<p float="left">
-  <img src="../docs/images/clean_3d_print_1.jpg" width="32%" />
-  <img src="../docs/images/clean_3d_print_2.jpg" width="32%" /> 
-  <img src="../docs/images/clean_3d_print_3.jpg" width="32%" />
-</p>
+- PLA材料 3D打印机身
+  - 层高:0.2mm
+  - 壁厚:1.5mm
+  - 填充密度:20％
+  - 填充图案:网格
+  - 机身数量 共4块
+  - 建议价格:¥120.00以内(含邮费)
 
-### Alternatives
+## 部件
 
-If you do not have access to a 3D printer, there are several Arduino robot car kits available which you can use as a starting point. These kits come with a chassis, motors and accessories. We recommend to get a basic kit, since you won't need a lot of the electronics and sensors of the more expensive kits. Here are some options:
+机器人的组装有两种不同的选择：DIY和PCB。 DIY方法依赖于流行的L298N电机驱动器，建议具有一定电子经验的业余爱好者使用。 它需要大量的接线，尤其是在安装所有传感器和LED的情况下。但是，在大多数情况下，所有组件都很容易获得，尤其是对于只需要制作一部车身或只是为了尝试项目，建议使用DIY选项。同时为了减少布线并简化组装，我们还开发了[custom PCB](pcb)。 如果您想要制作过程更简单或想要多个OpenBots车身，则建议这样做。
 
-- Perseids DIY Robot Smart Car Chassis Kit ([EU](https://www.amazon.de/dp/B07DNXBNHY), [US](https://www.amazon.com/dp/B07DNXBFQN))
-- SZDoit 4WD Smart Metal Robot Car Chassis Kit ([US](https://www.amazon.com/dp/B083K4RKBP), [AE](https://www.aliexpress.com/item/33048227237.html))
-- Joy-it Robot Car Kit 01 ([EU](https://www.amazon.de/dp/B073ZGJF28))
-- Smart Car Kit 4WD Smart Robot Car Chassis Kit ([AE](https://www.aliexpress.com/item/4001238626191.html))
+### 料清单
 
-You will also need a phone mount. Here is one option:
+我们的机器人主体依靠随时可用的爱好电子设备。 我们提供快速运输到德国（EU）和美国（US）的链接。 如果您有耐心等待更长的时间，您也可以从速卖通（AE）那里购买便宜得多的组件。中国用户建议在淘宝购买。您将需要以下组件。
 
-- Mpow Dashboard Car Phone Mount ([EU](https://www.amazon.de/dp/B0762GS7MS), [US](https://www.amazon.com/dp/B08BYFP9BZ))
+(通用)
 
-You can also get creative and build your own OpenBot chassis and phone mount using a material of your choice (e.g. wood, cardboard, styrofoam, etc.). If you do, please post some pictures on the [Slack channel](https://github.com/intel-isl/OpenBot#contact) so others can admire your creativity. Here is one example by [@custom-build-robots](https://custom-build-robots.com/roboter/openbot-dein-smartphone-steuert-ein-roboter-auto-chassis-bauen/13636):
+- Arduino nano V3.0 CH340G 改进版
+  - 数量 1
+  - 价格:¥5.49
+  - [淘宝购买](https://s.click.taobao.com/iI1K4xu)
+- 直流减速电机+智能小车车轮cbot 
+  - 数量 4
+  - 价格:¥10.00
+  - [淘宝购买](https://s.click.taobao.com/GA955xu)
+- 18650大容量充电锂电池
+  - 数量 3
+  - 价格:¥16.80
+  - [淘宝购买](https://s.click.taobao.com/5jj45xu) , [领券](https://s.click.taobao.com/ww855xu)
+- BS电池盒 5号/五号/七号7号18650电池盒 
+  - 数量 1
+  - 价格:¥1.59
+  - [淘宝购买](https://s.click.taobao.com/tzcJ4xu)
+- T型口转type-c 连接线
+  - 数量 1
+  - 价格:¥25.00
+  - [淘宝购买](https://s.click.taobao.com/FKmZVvu)
+- 304不锈钢拉簧拉力拉伸带钩弹簧 
+  - 数量 1
+  - 价格:¥0.60
+  - [淘宝购买](https://s.click.taobao.com/nj1Kzwu)
+- M2.5 M3 304不锈钢圆头一字螺丝*25mm
+  - 数量 16
+  - 价格:¥4.00
+  - [淘宝购买](https://s.click.taobao.com/GGF45xu)
+- 304不锈钢六角螺母小螺丝帽
+  - 数量 16
+  - 价格:¥18.00
+  - [淘宝购买](https://s.click.taobao.com/3roD0xu)
+- M3* 5 螺丝
+  - 数量 6
+  - 价格:￥2.18
+  - [淘宝购买](https://s.click.taobao.com/WHO55xu) , [领券](https://s.click.taobao.com/6Np45xu)
+- 杜邦线
+  - 数量 1
+  - 价格:¥2.80
+  - [淘宝购买](https://s.click.taobao.com/nfSJ4xu)
 
-<p float="left">
-  <img src="../docs/images/chassis_cardboard_1.jpg" width="32%" />
-  <img src="../docs/images/chassis_cardboard_2.jpg" width="32%" />
-  <img src="../docs/images/chassis_cardboard_3.jpg" width="32%" />
-</p>
+(仅DIY)
 
-## Assembly
+- L298N 开发板
+  - 数量 1
+  - 价格:¥14.92
+  - [淘宝购买](https://s.click.taobao.com/pyt45xu) , [领券](https://s.click.taobao.com/C1nJ4xu)
+- (可选) 电阻器(2x 150<span>&#8486;</span>用于LED，20k<span>&#8486;</span>和10k<span>&#8486;</span>用于分压器)
+- (Combo) 4x TT马达和轮胎+2x L298N+dupont电缆 ([US](https://www.amazon.com/dp/B07ZT619TD))
+- (Combo) 4x TT马达和轮胎+电线+螺丝 ([US](https://www.amazon.com/dp/B07DRGTCTP))
 
-There are two different options for assembly of the robot, DIY and PCB. The DIY approach relies on the popular L298N motor driver and is recommended for hobbyists with some electronics experience. It requires a fair amount of wiring, especially if all the sensors and LEDs are installed. However, all components are readily available in most contries and especially for single builds or just to try out the project, the DIY option is recommended. In order to reduce the wiring and make assembly easier, we have also developed a [custom PCB](pcb). This is recommended if you desire a cleaner build or want to build multiple OpenBots.
+(仅PCB)
 
-### Bill of materials
+- 1x [自定义PCB](pcb)
+- 5条Micro JST PH 2.0电缆([淘宝购买](https://s.click.taobao.com/HYyOTvu))
 
-Our robot body relies on readily available hobby electronics. We provide links for Germany (EU) and the United States (US) with fast shipping. If you have the patience to wait a bit longer, you can also get the compoenents a lot cheaper from AliExpress (AE). You will need the following components.
+(可选)
 
-#### Required components
+- 测速传感器 Tacho Sensor 3.3V-5V
+  - 数量 2
+  - 价格:¥3.80
+  - [淘宝购买](https://s.click.taobao.com/jMA45xu)
+- HC-SR04超声波测距模块传感器
+  - 数量 1
+  - 价格:¥2.69
+  - [淘宝购买](https://s.click.taobao.com/q5545xu)
+- 21*15mm 开关
+  - 数量 1  
+  - 价格:¥1.60
+  - [淘宝购买](https://m.tb.cn/h.VzbvV36)
+- 5mm发光二极管橘色 (接线需要分压器, 新手不太建议)
+  - 数量 2
+  - 价格:¥1.98
+  - [淘宝购买](https://s.click.taobao.com/rjXJ4xu)
 
-- 1x Arduino Nano ([EU](https://www.amazon.de/dp/B01MS7DUEM), [US](https://www.amazon.com/dp/B00NLAMS9C), [AE](https://www.aliexpress.com/item/32866959979.html))
-- 4x TT motors with tires ([EU](https://www.conrad.de/de/p/joy-it-com-motor01-getriebemotor-gelb-schwarz-passend-fuer-einplatinen-computer-arduino-banana-pi-cubieboard-raspbe-1573543.html), [US](https://www.amazon.com/dp/B081YQM55P), [AE](https://www.aliexpress.com/item/4000126948489.html))
-- 3x 18650 battery ([EU](https://www.conrad.de/de/p/conrad-energy-18650-usb-spezial-akku-18650-li-ion-3-7-v-1400-mah-1525536.html), [US](https://www.amazon.com/dp/B083K4XSKG), [AE](https://www.aliexpress.com/item/32352434845.html))
-- 1x 18650 battery holder([EU](https://www.amazon.de/dp/B075V25QJ9), [US](https://www.amazon.com/dp/B07DWQYD7H), [AE](https://www.aliexpress.com/item/33037738446.html))
-- 1x USB OTG cable ([EU](https://www.amazon.de/gp/product/B075M4CQHZ) ,[US](https://www.amazon.com/dp/B07LBHKTMM), [AE](https://www.aliexpress.com/item/10000330515850.html))
-- 1x spring or rubber band ([EU](https://www.amazon.de/gp/product/B01N30EAZO/), [US](https://www.amazon.com/dp/B008RFVWU2), [AE](https://www.aliexpress.com/item/33043769059.html))
-- 16x M3x25 screw ([EU](https://www.amazon.de/dp/B07KFL3SSV), [US](https://www.amazon.com/dp/B07WJL3P3X), [AE](https://www.aliexpress.com/item/4000173341865.html))
-- 16x M3 nut ([EU](https://www.amazon.de/dp/B07JMF3KMD), [US](https://www.amazon.com/dp/B071NLDW56), [AE](https://www.aliexpress.com/item/32977174437.html))
-- 6x M3x5 screw ([EU](https://www.amazon.de/dp/B01HBRG3W8), [US](https://www.amazon.com/dp/B07MBHMLL2), [AE](https://www.aliexpress.com/item/32892594230.html))
-- Dupont cables ([EU](https://www.amazon.de/dp/B07KYHBVR7), [US](https://www.amazon.com/dp/B07GD2BWPY), [AE](https://www.aliexpress.com/item/4000766001685.html))
+## 制作说明
 
-#### Optional components
+### 选项1：自己动手做
 
-- 2 x Speed Sensor ([EU](https://www.conrad.de/de/p/joy-it-sen-speed-erweiterungsmodul-passend-fuer-einplatinen-computer-arduino-banana-pi-cubieboard-raspberry-pi-pc-1646891.html), [US](https://www.amazon.com/dp/B081W2TY6Q), [AE](https://www.aliexpress.com/i/32850602744.html))
-- 1x Ultrasonic Sensor ([EU](https://www.amazon.de/dp/B00LSJWRXU), [US](https://www.amazon.com/dp/B0852V181G/), [AE](https://www.aliexpress.com/item/32713522570.html))
-- 1x On/Off Switch ([EU](https://www.amazon.de/dp/B07QB22J62), [US](https://www.amazon.com/dp/B01N2U8PK0), [AE](https://www.aliexpress.com/item/1000005699023.html))
-- 2x Orange LED 5mm ([EU](https://www.amazon.de/gp/product/B01NCL0UTQ), [US](https://www.amazon.com/dp/B077XD7MVB), [AE](https://www.aliexpress.com/item/4000329069943.html))
-- 1x OLED display ([EU](https://www.amazon.de/dp/B079H2C7WH), [US](https://www.amazon.com/dp/B085NHM5TC), [AE](https://www.aliexpress.com/item/4001268387467.html))
+![Wiring Diagram](../docs/images/wiring_diagram.png)
 
-#### DIY components (Option 1)
+1. 如有必要，将线连接到电动机
+2. 将两个电动机的正极和负极引线插入L298N板的OUT1（+）和OUT2（-）
+3. 将其他两个电动机的正极和负极引线插入L298N板的OUT4（+）和OUT3（-）
+4. 用4个M3x5螺钉安装L298N，用8个M3x25螺钉和螺母安装电动机。
+5. （可选）安装超声波传感器和橙色LED
+6. 使用两个M3x25螺钉和螺母将手机支架的底部安装到顶板上
+7. 插入手机支架的顶部并安装弹簧或橡皮筋
+8. 用一颗M3x5螺钉安装速度传感器
+9. 安装电池盒
+10. （可选）插入电源开关
+11. 将L298N的PWM输入连接到Arduino的引脚D5，D6，D9和D10
+12. 将速度传感器和超声波传感器连接到5V和GND
+13. 将速度传感器的D0连接到Arduino的D2引脚（左）和D3（右侧）
+14. 将超声波传感器的回声和触发器连接到Arduino的D11和D12引脚
+15. 将USB电缆连接到Arduino，并将其穿过顶盖
+16. （可选）将LED连接到Arduino和GND的D4引脚（左）和D7引脚（右）
+17. （可选）将分压器连接至Arduino的A7引脚
+18. 将电池电缆连接至L298N的Vin。如果安装了交换机，请将其放在当前路径中。
+19. 将六个M3螺母插入底板，然后用六个M3x25螺钉安装顶盖
+20. 安装车轮
 
-- 1x L298N Motor Driver ([EU](https://www.conrad.de/de/p/joy-it-motormodul-2-u-4-phasen-6-bis-12v-1573541.html), [US](https://www.amazon.com/dp/B085XSLKFQ), [AE](https://www.aliexpress.com/item/32994608743.html))
-- (Optional) Resistors (2x 150<span>&#8486;</span> for the LEDs and a 20 k<span>&#8486;</span> and 10k<span>&#8486;</span> for the voltage divider)
-- (Combo) 4x TT motors & tires + 2x L298N + dupont cables ([US](https://www.amazon.com/dp/B07ZT619TD))
-- (Combo) 4x TT motors & tires + wires + screws ([US](https://www.amazon.com/dp/B07DRGTCTP))
+### 选项2：定制PCB
 
-#### PCB components (Option 2)
+1. 将带有Micro JST PH 2.0连接器的导线焊接到电机上。
+2. 将左边两个电机连接到 M3 和 M4，右边两个电机连接到 M1 和 M2。
+3. 用四个 M3x5 螺丝安装 PCB，用八个 M3x25 螺丝和螺母安装电机。
+4. 按照DIY选项中的步骤5-10进行。
+5. 将LED、速度传感器和超声波传感器连接到PCB上。
+6. 将USB电缆连接到Arduino，并将其穿过顶盖。
+7. 将电池连接到PCB的Vin（Micro JST PH 2.0连接器）。如果你安装了开关，把它放在电流路径上。
+8. 按照DIY选项中的步骤19-20。
 
-- 1x [Custom PCB](pcb)
-- 5x Micro JST PH 2.0 cable ([EU](https://www.amazon.de/gp/product/B07449V33P), [US](https://www.amazon.com/dp/B07449V33P), [AE](https://www.aliexpress.com/item/32963304134.html))
+## 下一步
 
-### Build instructions
+烧录[Arduino固件](../firmware/README_CN.md)
 
-**Tip:** Click on the images to open them in full resolution in a new tab.
-
-#### Option 1: DIY
-
-<p float="left">
-  <img src="../docs/images/diy_parts.jpg" height="300" />
-  <img src="../docs/images/wiring_diagram.png" height="300" /> 
-</p>
-
-**Tip:** To make all the wiring easier you can build a small power distributor for the 5V and GND connections by soldering a 6x2 male header to a perfboard. Then connect the power distributor with the 5V / GND of the motor driver.
-
-1. Solder wires to the motors and add the encoder disks to the two front motors if you intend to use the speed sensors.
-    <p float="left">
-      <img src="../docs/images/add_wires_motor.jpg" width="32%" />
-      <img src="../docs/images/add_disk_motor.jpg" width="32%" /> 
-    </p>
-2. Insert the positive and negative leads of the two left motors into OUT1 (+) and OUT2 (-) of the L298N board. Insert the positive and negative leads of the two right motors into OUT4 (+) and OUT3 (-) of the L298N board.
-3. Mount the motors with eight M3x25 screws and nuts.
-    <p float="left">
-      <img src="../docs/images/attach_motors_1.jpg" width="32%" />
-      <img src="../docs/images/attach_motors_2.jpg" width="32%" /> 
-      <img src="../docs/images/attach_motors_3.jpg" width="32%" />
-    </p>
-4. Mount the L298N with four M3x5 screws
-5. (Optional) Install the ultrasonic sensor and replace the angled connector with a straigt one (or carefully bend the pins).
-    <p float="left">
-      <img src="../docs/images/sonar_front.jpg" width="32%" />
-      <img src="../docs/images/sonar_back.jpg" width="32%" /> 
-      <img src="../docs/images/sonar_bend_pins.jpg" width="32%" />
-    </p>
-6. (Optional) Install the orange LEDs for the indicator signals.
-    <p float="left">
-      <img src="../docs/images/led_insert.jpg" width="32%" />
-      <img src="../docs/images/led_left.jpg" width="32%" /> 
-      <img src="../docs/images/led_right.jpg" width="32%" />
-    </p>
-7. Mount the bottom of the phone mount to the top plate using two M3x25 screws and nuts.
-    <p float="left">
-      <img src="../docs/images/install_camera_mount_1.jpg" width="32%" />
-      <img src="../docs/images/install_camera_mount_2.jpg" width="32%" /> 
-      <img src="../docs/images/install_camera_mount_3.jpg" width="32%" />
-    </p>
-8. Insert the top of the phone mount and install the spring or rubber band.
-    <p float="left">
-      <img src="../docs/images/install_spring_1.jpg" width="32%" />
-      <img src="../docs/images/install_spring_2.jpg" width="32%" /> 
-    </p>
-9. Replace the angled connector with a straigt one (or carefully bend the pins) and then mount the speed sensors with one M3x5 screw each.
-    <p float="left">
-      <img src="../docs/images/install_speed_sensor_1.jpg" width="32%" />
-      <img src="../docs/images/install_speed_sensor_2.jpg" width="32%" /> 
-      <img src="../docs/images/install_speed_sensor_3.jpg" width="32%" />
-    </p>
-10. Install the battery case (e.g. velcro).
-    <p float="left">
-      <img src="../docs/images/install_battery_1.jpg" width="32%" />
-      <img src="../docs/images/install_battery_2.jpg" width="32%" /> 
-      <img src="../docs/images/install_battery_3.jpg" width="32%" />
-    </p>
-11. (Optional) Insert the on/off switch put it in the current path.
-    1. Push the switch into the appropriate opening until you hear a click.
-    2. Solder the red wires (12V) of the battery case and the power cable each to one of the pins of the switch. Connect the black wires (GND), and cover the connection with some heatshrink.
-    3. Fix the cables with some tape.
-    <p float="left">
-      <img src="../docs/images/install_switch_1.jpg" width="32%" />
-      <img src="../docs/images/install_switch_2.jpg" width="32%" /> 
-      <img src="../docs/images/install_switch_3.jpg" width="32%" />
-    </p>
-12. (Optional) Attach the OLED display.
-13. Connect the PWM inputs of the L298N to pins D5, D6, D9 and D10 of the Arduino.
-14. Connect the speed sensors and ultrasonic sensor to 5V and GND.
-15. Connect pin D0 of the speed sensors to pins D2 (left) and D3 (right) of the Arduino.
-16. Connect pins Echo and Trigger of the ultrasonic sensor to pins D11 and D12 of the Arduino respectively.
-17. (Optional) Connect the LEDs to pins D4 (left) and D7 (right) of the Arduino and GND. We recommend to add a 150 Ohm resistor in series to limit the current draw.
-18. (Optional) Connect the voltage divider to pin A7 of the Arduino. It is used to measure the battery voltage.
-19. (Optional) Connect the OLED display (SSD1306 chip) via the I2C bus to the Arduino Nano
-    1. Connect the VIN and GND pins of the display to 5V and GND.
-    2. Connect the SCL pin of the display to the A5 pin.
-    3. Connect the SDA pin of the display to the A4 pin.
-20. Connect the power cables to +12V and GND of the L298N.
-21. Connect the USB cable to the Arduino and route it through the top cover.
-22. Insert six M3 nuts into the bottom plate and mount the top cover with six M3x25 screws.
-23. Install the wheels.
-
-#### Option 2: Custom PCB
-
-1. Solder wires with Micro JST PH 2.0 connectors to the motors and add the encoder disks to the two front motors if you intend to use the speed sensors.
-    <p float="left">
-      <img src="../docs/images/add_wires_motor.jpg" width="32%" />
-      <img src="../docs/images/add_disk_motor.jpg" width="32%" /> 
-    </p>
-2. Mount the motors with eight M3x25 screws and nuts.
-    <p float="left">
-      <img src="../docs/images/attach_motors_1.jpg" width="32%" />
-      <img src="../docs/images/attach_motors_2.jpg" width="32%" /> 
-      <img src="../docs/images/attach_motors_3.jpg" width="32%" />
-    </p>
-3. Connect the left two motors to M3 and M4 and the right two motors to M1 and M2.
-    <p float="left">
-      <img src="../docs/images/connect_motors_pcb.jpg" width="32%" />
-    </p>
-4. Mount the PCB with four M3x5 screws and the motors with eight M3x25 screws and nuts.
-    <p float="left">
-      <img src="../docs/images/attach_pcb.jpg" width="32%" />
-      <img src="../docs/images/chassis_motors_pcb.jpg" width="32%" />
-    </p>
-5. Follow steps 5-12 from the DIY option.
-6. Connect the ultrasonic sensor (VCC/+, Trig, Echo, GND/-) to the 4-pin header labeled *SONAR* on the PCB.
-    <p float="left">
-      <img src="../docs/images/connect_sonar_sensor.jpg" width="32%" />
-    </p>
-7. Connect the left and right indicator signals (orange LEDs) to the 2-pin headers labeled *SIGNAL_L* and *SIGNAL_R* on the PCB. The longer leg is + and the shorter one -.
-8. Connect the left and right speed sensors (VCC/+, GND/-, D0) to the 3-pin headers labeled *SPEED_L* and *SPEED_R*.
-9. (Optional) Connect the OLED display (SSD1306 chip) to the IO2 header on the PCB.
-    1. Connect the VIN and GND pins of the display to 5V and GND.
-    2. Connect the SCL pin of the display to the A5 pin.
-    3. Connect the SDA pin of the display to the A4 pin.
-10. Connect the power cables to Vin (Micro JST PH 2.0 connector) of the PCB.
-11. Follow steps 21-23 from the DIY option.
-
-## Next
-
-Flash the [Arduino Firmware](../firmware/README.md)

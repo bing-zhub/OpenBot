@@ -1,33 +1,34 @@
-# Custom PCB
+# 定制PCB
 
 <p align="center">
-  <span>English</span> |
-  <a href="README_CN.md">简体中文</a>
+  <a href="README.md">English</a> |
+  <span>简体中文</span>
 </p>
 
-The custom PCB acts as a carrier board for the Arduino Nano and integrates modern motor drivers, the voltage divider circuit and resistors for the LEDs. The Arduino is simply plugged into the pin header and all sensors and LEDs are connected via Dupont cables to the appropriate connectors.
+
+定制PCB充当Arduino Nano的载板，并集成了现代电机驱动器，分压器电路和LED电阻器。只需将Arduino插入引脚，所有传感器和LED都通过杜邦线连接到适当的连接器。
 
 ![PCB_2D](../../docs/images/pcb_2d_v2.png)
 ![PCB_3D](../../docs/images/pcb_3d_v2.png)
 
-The latest PCB is [version 2](v2). Here are the changes compared to [version 1](v1):
+最新的PCB是[版本2](v2)。以下是与[版本1](v1)相比的更改：
 
-- Move the right speed sensor to pin D3 to enable interrupt functionality
-- Add Power LED for main battery
-- Update some components which are more commonly available
-- Update voltage divider to 20k/10k for better precision
-- Change motor connectors to upright version for easier access
+- 将右边的速度传感器移到D3引脚，以实现停止功能
+- 为主电池添加电源LED
+- 更新一些更常用的组件
+- 将分压器更新为20k/10k，以实现更高的精度
+- 将电机连接器更改为直立版本，以便于操作
 
-If you have already ordered [version 1](v1) of the PCB ([2D view](../docs/images/pcb_2d_v1.png), [3D view](../docs/images/pcb_3d_v1.png)), don't worry it will work fine. Just make sure to set the correct flag in the firmware.
+如果您已经订购了PCB的[版本1](v1)([2D视图](../docs/images/pcb_2d_v1.png)，[3D视图](../docs/images/pcb_3d_v1.png) ，请放心，它会正常工作。只要确保在固件中设置正确的标志即可。
 
-The custom PCB involves the following steps:
+定制PCB涉及以下步骤：
 
-1) **Order the PCB**: Download the [Gerber](v2/gerber_v2.zip) files and order the PCB at the vendor of your choice. You can also order the PCB directly on [PCBWay](https://www.pcbway.com/project/shareproject/OpenBot__Turning_Smartphones_into_Robots.html) where we have shared a project for OpenBot.
-2) **Order the components:** Download the [BOM](v2/BOM_v2.csv) and order the compenents at the vendor of your choice, for example [LCSC](https://lcsc.com).
-3) **Assembly of the PCB:** You can either assemble the PCB yourself or have them assembled by a vendor. For automated assembly you will need the [Centroid File](v2/centroid_file_v2.csv). If you order the PCB at [JLCPCB](https://jlcpcb.com/), you can use their SMT assembly service. Then you will only need to order and solder the through-hole components yourself. We found this to be the most convenient, cheapest and fastest option. In [version 2](v2) of the PCB, we have updated the components to make sure all of them are available from [JLCPCB](https://jlcpcb.com/) directly.
+1)**订购PCB：** 下载[Gerber](v2/gerber_v2.zip)文件，然后在您选择的供应商处订购PCB。您也可以直接在我们共享了OpenBot项目的[PCBWay](https://www.pcbway.com/project/shareproject/OpenBot__Turning_Smartphones_into_Robots.html)上订购PCB。
+2)**订购组件：** 下载[BOM](v2/BOM_v2.csv)并在您选择的供应商处订购组件，例如[LCSC](https://lcsc.com)。
+3)**PCB的组装：** 您既可以自己组装PCB，也可以由供应商组装。对于自动组装，您需要[Centroid File](v2/centroid_file_v2.csv)。如果您通过[JLCPCB](https://jlcpcb.com/)订购PCB，则可以使用其SMT组装服务。然后，您只需要自己订购和焊接通孔组件。我们发现这是最方便，最便宜和最快的选择。在PCB的[版本2](v2)中，我们更新了组件，以确保可以从[JLCPCB](https://jlcpcb.com/)直接获得所有组件。
 
-You can also find vendors that will provide you a TurnKey solution covering all 3 steps. They will manufacture the PCB, source the components and assemble the PCB. This is very convenient and also not too expensive. However, delivery times are often very long (1-3 months).
+您还可以找到可以为您提供涵盖所有3个步骤的TurnKey解决方案的供应商。他们将制造PCB，采购组件并组装PCB。这非常方便并且也不太昂贵。但是，交货时间通常很长(1-3个月)。
 
-When requesting a quote at [PCBWay](https://www.pcbway.com/orderonline.aspx), you can select the assembly service after uploading the Gerber file.
-![Assembly Service](../../docs/images/assembly_service.jpg)
-In the next step, you will need to upload the [BOM](v2/BOM_v2.csv) and the [Centroid File](v2/centroid_file_v2.csv). Your quote will then be reviewed and updated within a few days. You can then choose to proceed with payment after reviewing cost and delivery time.
+在[PCBWay](https://www.pcbway.com/orderonline.aspx)上请求报价时，可以在上载Gerber文件后选择组装服务。
+![组装服务](../../docs/images/assembly_service.jpg)
+在下一步中，您将需要上传[BOM](v2/BOM_v2.csv)和[Centroid File](v2/centroid_file_v2.csv)。您的报价将在几天之内进行审核和更新。然后，您可以在查看费用和交货时间后选择继续付款。

@@ -1,52 +1,52 @@
-# Contributing
+# 贡献
 
 <p align="center">
-  <span>English</span> |
-  <a href="README_CN.md">简体中文</a>
+  <a href="README.md">English</a> |
+  <span>简体中文</span>
 </p>
 
-## Process
+## 流程
 
-1. Submit an issue describing the changes you want to implement. If it's only minor changes/bug-fixes, you can skip to step 3.
-2. After the scope was discussed in the issue, assign it to yourself. It should show up in the "To do" column in the OpenBot project.
-3. Fork the project and clone it locally.
+1. 提交一个问题，描述你要实现的改变。如果只是小的改动/bug修复，你可以跳到第3步。
+2. 在issue中讨论了范围之后，把它分配给自己。它应该显示在OpenBot项目的 "To DO"一栏中。
+3. Fork 项目并克隆到本地。
     
-   `git clone https://github.com/<user_id>/OpenBot.git`
+   `git clone https://github.com/<user_id>/OpenBot.git`。
 
-4. Create a branch and name it `<user_id>/<feature>` where `<feature>` concisely describes the scope of the work.
+4. 创建一个分支，并将其命名为`<user_id>/<feature>`，其中`<feature>`简明扼要地描述工作范围。
 
-   `git checkout -b <user_id>/<feature>`
+   `git checkout -b <user_id>/<feature>`。
    
-5. Do the work, write good commit messages, push your branch to the forked repository.
+5. 做好工作，写好提交信息，把你的分支推送到分叉的仓库里。
    
    ```
-   git add <modified file>
-   git commit -m <meaningful description>
-   git push --set-upstream origin <user_id>/<feature>
+   git add <修改后的文件>
+   git commit -m <有意义的描述>。
+   git push --set-upstream origin <user_id>/<feature>。
    ```
    
-6. Create a [pull request](https://github.com/intel-isl/OpenBot/pulls) in GitHub and link the issue to it. It should show up in the "In progress" column in the OpenBot project.
-7. Work on any code review feedback you may receive and push it to your fork. The pull request gets updated automatically.
-8. Get a cold drink of your choice to reward yourself for making the world a better place.
+6. 在GitHub上创建一个[pull request](https://github.com/intel-isl/OpenBot/pulls)，并将问题链接到它。它应该会显示在OpenBot项目的 "In progress "栏中。
+7. 处理你可能收到的任何代码审查反馈，并将其推送到你的fork中。pull request会自动更新。
+8. 来一杯你喜欢的冷饮，奖励你让世界变得更美好。
 
-## Guidelines
+## 指南
 
-- Use same style and formatting as rest of code. 
-  - For the Android code you can run:
-    1. `./gradlew checkStyle` --> returns java files with incorrect style. 
-    2. `./gradlew applyStyle` --> applies neccessary style changes to all java files.
-  - For the Arduino and Python code, just try to blend in.
-- Update documentation associated with code changes you made.
-- If you want to include 3rd party dependencies, please discuss this in the issue first. 
-- Pull requests should implement single features with as few changes as possible.
-- Make sure you don't include temporary or binary files (the gitignores should mostly take care of this).
-- Rebase/merge master into your branch before you submit the pull request.
-- If possible, test your code on Windows, Linux and OSX.
+- 使用与其他代码相同的样式和格式。
+  - 对于Android代码，你可以运行以下命令。
+    1. `./gradlew checkStyle`-->返回样式不正确的Java文件。
+    2. `./gradlew applyStyle`-->将必要的样式更改应用于所有Java文件。
+  - 对于Arduino和Python代码，只需尝试混合即可。
+- 更新与你所做的代码更改相关的文档。
+- 如果你想加入第三方的依赖关系，请先在问题中讨论。
+- pull request应该尽可能少地实现单一功能的改动。
+- 确保你不包含临时文件或二进制文件 (gitignores 应该主要处理这个问题)。
+- 在提交拉取请求之前，先将master分支重写/合并到你的分支中。
+- 如果可能的话，在Windows、Linux和OSX上测试你的代码。
 
 
-If you are looking for more information about contributing to open-source projects, here are two good references:
+如果你正在寻找更多关于为开源项目做贡献的信息，这里有两个很好的参考资料。
 
-- [How to Contribute to Open Source](http://opensource.guide/how-to-contribute/)
-- [The beginner's guide to contributing to a GitHub project](https://akrabat.com/the-beginners-guide-to-contributing-to-a-github-project/)
+- [如何为开源做贡献](http://opensource.guide/how-to-contribute/)
+- [为GitHub项目做贡献的初学者指南(英文)](https://akrabat.com/the-beginners-guide-to-contributing-to-a-github-project/)
 
-Thank you very much!
+非常感谢你！

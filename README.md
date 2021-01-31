@@ -2,7 +2,7 @@
   <img align="center" alt="Banner" width="100%" src="docs/images/banner.jpg" />
 </a>
 
-<h1 align="center"><a>Turning Smartphones into Robots</a></h1>
+<h1 align="center"><a>将智能手机变成机器人</a></h1>
 
 <p align="center">
    <img alt="GitHub build" src="https://img.shields.io/github/workflow/status/Intel-ISL/OpenBot/Java%20CI%20with%20Gradle"></a>
@@ -16,64 +16,22 @@
 </p>
 
 <p align="center">
-  <span>English</span> |
-  <a href="README_CN.md">简体中文</a>
+  <a href="README.md">English</a> |
+  <span>简体中文</span>
 </p>
 
-OpenBot leverages smartphones as brains for low-cost robots. We have designed a small electric vehicle that costs about $50 and serves as a robot body. Our software stack for Android smartphones supports advanced robotics workloads such as person following and real-time autonomous navigation.
+OpenBot利用智能手机作为低成本机器人的大脑。我们设计了一款小型电动车，各种配件加一起售价约50美元，可以用作机器人车身。 我们的Android智能手机软件栈支持先进的机器人功能，如人跟踪和实时自主导航。
 
-## Video
+## 开始使用OpenBot
 
-<a href="https://www.youtube.com/watch?v=qc8hFLyWDOM" >
-  <img align="center" width="500" alt="youtube video" src="docs/images/youtube.jpg" />
-</a>
+- 构建自己的车身 [车身](body/README_CN.md)
+- 刷入 [Arduino 固件](firmware/README_CN.md)
+- 编译并运行 [Android App](android/README_CN.md)
+- 训练自己的 [驾驶策略](policy/README_CN.md)
 
-## Get started with OpenBot
-- Build your own [Robot Body](body/README.md)
-- Flash the [Arduino Firmware](firmware/README.md)
-- Install the [Android App](android/README.md)
-- Train your own [Driving Policy](policy/README.md)
+## 引用
 
-## Get the source code
-
-- You can download the repo as a [zip file](https://github.com/intel-isl/OpenBot/archive/master.zip) and extract it into a folder of your choice.
-- You can clone the OpenBot repository from GitHub with the following command:
-    ```bash
-    git clone https://github.com/intel-isl/OpenBot.git
-    ```
-- You can fork the OpenBot repository and then clone your local copy. This is recommended, especially if you want to [contribute](CONTRIBUTING.md).
-
-## Contribute
-
-Please read the [contribution guidelines](CONTRIBUTING.md). If you are not sure where to start have a look at the [open issues](https://github.com/intel-isl/OpenBot/issues).
-
-## Contact
-
-- Join our [Slack](https://join.slack.com/t/openbot-community/shared_invite/zt-jl8ygxqt-WNRNi9yzh7Lu60qui6Nh6w) channel to connect with the OpenBot community.
-- Contact us via [Email](mailto:openbot.team@gmail.com)
-
-## Cool projects using OpenBot
-
-There are a lot of cool projects using OpenBot already. Below is a small selection. Click on the images to be redirected to the respective projects.
-
-<p float="left">
-  <a href="https://www.thingiverse.com/thing:4670884" target="_blank">
-    <img alt="Tank OpenBot" width="24%" src="docs/images/openbot_tank.jpg" />
-  </a>
-  <a href="https://diyrobocars.com/2020/12/14/an-improved-version-of-the-intel-openbot" target="_blank">
-    <img alt="2WD OpenBot" width="24%" src="docs/images/openbot_2wd.jpg" />
-  </a>
-  <a href="https://custom-build-robots.com/raspberry-pi-robot-cars/openbot-your-smartphone-controls-a-robot-car-introduction/13860?lang=en" target="_blank">
-    <img alt="Cardboard OpenBot" width="24%" src="docs/images/chassis_cardboard_1.jpg" />
-  </a>
-  <a href="https://www.youtube.com/watch?v=PEj8jWapGt4" target="_blank">
-    <img alt="Baby Yoda OpenBot" width="24%" src="docs/images/openbot_yoda.jpg" />
-  </a>
-</p>
-
-## Citation
-
-Please cite our [paper](docs/paper/OpenBot.pdf) if you use OpenBot.
+如果使用了OpenBot，请引用我们的 [论文](docs/paper/OpenBot.pdf) 。
 
 ```bib
 @article{openbot2020,
@@ -83,6 +41,21 @@ Please cite our [paper](docs/paper/OpenBot.pdf) if you use OpenBot.
     year      = {2020},
 }
 ```
+
+## 视频
+
+<a href="https://www.youtube.com/watch?v=qc8hFLyWDOM" >
+  <img align="center" width="500" alt="youtube video" src="docs/images/youtube.jpg" />
+</a>
+
+## 贡献
+
+请阅读[贡献准则](CONTRIBUTING_CN.md)。 如果您不确定从哪里开始，请查看[未解决的问题](https://github.com/intel-isl/OpenBot/issues)。
+
+## 联系我们
+
+- 加入 [Slack](https://join.slack.com/t/openbot-community/shared_invite/zt-jl8ygxqt-WNRNi9yzh7Lu60qui6Nh6w) 频道与OpenBot社区联系. 
+- 给我们发[Email](mailto:openbot.team@gmail.com)
 
 <a href="https://www.openbot.org//" target="_blank">
   <img align="center" alt="Footer" width="100%" src="docs/images/footer.gif" />
