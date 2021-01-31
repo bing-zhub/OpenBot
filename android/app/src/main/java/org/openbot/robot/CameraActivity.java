@@ -20,10 +20,12 @@ package org.openbot.robot;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -48,6 +50,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.Trace;
+import android.text.InputType;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
@@ -57,6 +60,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -78,15 +82,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.paho.android.service.MqttAndroidClient;
-import org.eclipse.paho.client.mqttv3.IMqttActionListener;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.IMqttToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.openbot.R;
@@ -196,11 +191,15 @@ public abstract class CameraActivity extends AppCompatActivity
   protected final ControllerHandler controllerHandler = new ControllerHandler();
   private final AudioPlayer audioPlayer = new AudioPlayer(this);
   private final String voice = "matthew";
+  private int mqttControlModeChangeCounter = 0;
 
   protected static Vehicle vehicle = new Vehicle();
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
+
+    mqttControlModeChangeCounter = 0;
+
     LOGGER.d("onCreate " + this);
     super.onCreate(null);
     context = getApplicationContext();
@@ -357,9 +356,11 @@ public abstract class CameraActivity extends AppCompatActivity
 
               switch (action) {
                 case Constants.USB_ACTION_CONNECTION_ESTABLISHED:
+                  BotToControllerEventBus.emitEvent(createStatus("USB_CONNECTION", "ESTABLISHED"));
                   break;
 
                 case Constants.USB_ACTION_CONNECTION_CLOSED:
+                  BotToControllerEventBus.emitEvent(createStatus("USB_CONNECTION", "CLOSED"));
                   break;
 
                 case Constants.USB_ACTION_DATA_RECEIVED:
@@ -372,6 +373,9 @@ public abstract class CameraActivity extends AppCompatActivity
                   vehicle.setLeftWheelTicks(Float.parseFloat(itemList[1]));
                   vehicle.setRightWheelTicks(Float.parseFloat(itemList[2]));
                   vehicle.setSonarReading(Float.parseFloat(itemList[3]));
+                  BotToControllerEventBus.emitEvent(createStatus("BATTERY_VOLTAGE", ""+vehicle.getBatteryVoltage()));
+                  BotToControllerEventBus.emitEvent(createStatus("WHEEL_RPM", vehicle.getLeftWheelRPM()+","+vehicle.getRightWheelRPM()));
+                  BotToControllerEventBus.emitEvent(createStatus("OBSTACLE", ""+vehicle.getSonarReading()));
 
                   runOnUiThread(
                       () -> {
@@ -904,9 +908,10 @@ public abstract class CameraActivity extends AppCompatActivity
           else connectPhoneController();
           break;
         case MQTT:
+          mqttControlModeChangeCounter ++;
+          createDialogForInputServerURI();
           disconnectPhoneController();
           handleControllerEvents();
-          connectMQTTController();
           break;
         default:
           throw new IllegalStateException("Unexpected value: " + controlMode);
@@ -916,22 +921,51 @@ public abstract class CameraActivity extends AppCompatActivity
     }
   }
 
+  private void createDialogForInputServerURI(){
+    String mqttBrokerIP = preferencesManager.getMQTTBrokerIP();
+    boolean hasMqttBrokerIp = !mqttBrokerIP.isEmpty();
+    if(mqttControlModeChangeCounter == 1 && hasMqttBrokerIp) {
+      connectMQTTController(mqttBrokerIP);
+      return;
+    }
+
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle("MQTT Broker IP");
+
+    final EditText input = new EditText(this);
+
+    input.setInputType(InputType.TYPE_CLASS_TEXT);
+    builder.setView(input);
+
+    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        String serverURI = input.getText().toString();
+        preferencesManager.setMqttBrokerIp(serverURI);
+        connectMQTTController(serverURI);
+      }
+    });
+
+    builder.show();
+  }
+
+  private void connectMQTTController(String serverURI) {
+    if(!mqttController.isConnected()) {
+      mqttController.connect(this, serverURI);
+    }
+    DriveMode oldDriveMode = driveMode;
+    setDriveMode(DriveMode.DUAL);
+    driveModeSpinner.setAlpha(0.5f);
+    preferencesManager.setDriveMode(oldDriveMode.ordinal());
+  }
+
   private void connectPhoneController() {
     if (!phoneController.isConnected()) {
       phoneController.connect(this);
     }
     DriveMode oldDriveMode = driveMode;
     // Currently only dual drive mode supported
-    setDriveMode(DriveMode.DUAL);
-    driveModeSpinner.setAlpha(0.5f);
-    preferencesManager.setDriveMode(oldDriveMode.ordinal());
-  }
-
-  private void connectMQTTController() {
-    if(!mqttController.isConnected()) {
-      mqttController.connect(this);
-    }
-    DriveMode oldDriveMode = driveMode;
     setDriveMode(DriveMode.DUAL);
     driveModeSpinner.setAlpha(0.5f);
     preferencesManager.setDriveMode(oldDriveMode.ordinal());

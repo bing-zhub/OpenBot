@@ -26,6 +26,8 @@ public class SharedPreferencesManager {
   private static final String NUM_THREAD = "NUM_THREAD";
   private static final String CAMERA_SWITCH = "CAMERA_SWITCH";
   private static final String SHEET_EXPANDED = "SHEET_EXPANDED";
+  private static final String MQTT_BROKER_IP = "MQTT_BROKER_IP";
+  private static final String DEFAULT_MQTT_BROKER_IP = "";
 
   private final SharedPreferences preferences;
 
@@ -35,6 +37,8 @@ public class SharedPreferencesManager {
             .getApplicationContext()
             .getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
   }
+
+  public String getMQTTBrokerIP() { return preferences.getString(MQTT_BROKER_IP, DEFAULT_MQTT_BROKER_IP); }
 
   public int getBaudrate() {
     return preferences.getInt(BAUD_RATE, DEFAULT_BAUD_RATE);
@@ -75,6 +79,8 @@ public class SharedPreferencesManager {
   public boolean getSheetExpanded() {
     return preferences.getBoolean(SHEET_EXPANDED, false);
   }
+
+  public void setMqttBrokerIp(String mqttBrokerIp) { preferences.edit().putString(MQTT_BROKER_IP, mqttBrokerIp).apply(); }
 
   public void setBaudrate(int baudRate) {
     preferences.edit().putInt(BAUD_RATE, baudRate).apply();

@@ -24,9 +24,9 @@ public class MQTTController {
 
     private static final String TAG = "MQTTController";
 
-    private static final String SUB_MQTT_TOPIC = "openbot_cmd";
+    private static final String SUB_MQTT_TOPIC = "openbot_command";
 
-    private static final String PUB_MQTT_TOPIC = "openbot_state";
+    private static final String PUB_MQTT_TOPIC = "openbot_status";
 
     private static final String clientId = MqttClient.generateClientId();
 
@@ -35,10 +35,9 @@ public class MQTTController {
     private static Context context;
 
 
-    public void connect(Context context) {
+    public void connect(Context context, String serverURI) {
         this.context = context;
-        if(client != null && client.isConnected()) return;
-        client = new MqttAndroidClient(context, "tcp://192.168.1.121:1883", clientId);
+        client = new MqttAndroidClient(context, "tcp://" + serverURI + ":1883", clientId);
         try {
             IMqttToken token = client.connect();
             token.setActionCallback(new IMqttActionListener() {
@@ -133,6 +132,7 @@ public class MQTTController {
     }
 
     private void handleBotEvents() {
+        if(client == null) return ;
         BotToControllerEventBus.getProcessor().subscribe(event -> send(event));
     }
 }
