@@ -1,117 +1,95 @@
-# Android App
+# 安卓 App
 
 <p align="center">
-  <span>English</span> |
-  <a href="README_CN.md">简体中文</a>
+  <a href="README.md">English</a> |
+  <span>简体中文</span>
 </p>
 
-Our application is derived from the [TensorFlow Lite Object Detection Android Demo](https://github.com/tensorflow/examples/tree/master/lite/examples/object_detection/android). We add a data logger and support for game controllers to collect datasets with the robot. Currently, we record readings from following sensors: camera, gyroscope, accelerometer, magnetometer, ambient light sensor, and barometer. Using the Android API, we are able to obtain the following sensor readings: RGB images, angular speed, linear acceleration, gravity, magnetic field strength, light intensity, atmospheric pressure, latitude, longitude, altitude, bearing, and speed. In addition to the phone sensors, we also record body sensor readings (wheel odometry, obstacle distance and battery voltage), which are transmitted via the serial link. Lastly, we record control commands received from a connected game controller, if present. We also integrate several neural networks for person following and autonomous navigation.
+我们的应用程序派生自[TensorFlow Lite object Detection Android Demo](https://github.com/tensorflow/examples/tree/master/lite/examples/object_detection/android)。我们增加了一个数据记录器，并支持游戏控制器与机器人一起收集数据集。目前，我们记录以下传感器的读数：相机、陀螺仪、加速计、磁力计、环境光传感器和气压计。使用Android API，我们可以获得以下传感器读数：RGB图像、角速度、线加速度、重力、磁场强度、光强、大气压力、纬度、经度、海拔、方位和速度。除了手机传感器，我们还记录车身传感器读数(车轮里程计、障碍物距离和电池电压)，这些读数通过串口传输。最后，我们记录从连接的游戏控制器接收道德命令(如果存在)。我们还集成了多个神经网络用于人员跟踪和自主导航。
 
-## DISCLAIMERS
+## 免责声明
 
-1. **Safety:** Always make sure you operate in a safe environment. Keep in mind, that your phone could be damaged in a collision! Special 
-care is neccessary when using automated control (e.g. person following or driving policy). Make sure you always have a game controller connected and are familiar with the key mapping so you can stop the vehicle at any time. Use at your own risk!
-2. **App under development:** The application is under development and may crash or exhibit unexpected behaviour depending on your phone model and version of the operating system. Make sure to test all functionalities with no wheels connected. Use at your own risk!
+1. **安全性：** 一定要确保在安全的环境下操作。请记住，您的手机可能会在碰撞中受损！ **安全：** 一定要确保在安全的环境中操作。在使用自动控制时（如人员跟随或驾驶策略），必须特别小心。确保您始终连接着一个游戏手柄控制器，并熟悉按键映射，以便您可以在任何时候停止车辆。使用时风险自负
+2. **应用程序正在开发中：** 应用程序正在开发中，根据您的手机型号和操作系统的版本，可能会崩溃或表现出意外行为。请务必在不连接车轮的情况下测试所有功能。使用时请自行承担风险!
 
-## Getting Started
+## 开始
 
-### Install the app
-You can download the apk from the assets of the [latest release](https://github.com/intel-isl/OpenBot/releases/latest) and just [install](https://www.lifewire.com/install-apk-on-android-4177185) it on your phone directly. Note that that apk is signed with a debug key. If you want the latest app from the master branch, you can also download it from the build artifacts [here](https://github.com/intel-isl/OpenBot/actions?query=workflow%3A%22Java+CI+with+Gradle%22). Note, that it may not be stable. If you would like to make changes to the app later, follow the steps below to compile the app and deploy it on your phone.
+### 先决条件
 
-### Build the app
+- [Android Studio 3.2或更高版本](https://developer.android.com/studio/index.html)，用于构建和安装apk，否则从[最新版本](https://github.com/intel-isl/OpenBot/releases/latest)的静态资源中下载apk。
+- 安卓设备和安卓开发环境，最低API 21。
 
-#### Prerequisites
+### 构建
+- 如果你使用的是[最新版本](https://github.com/intel-isl/OpenBot/releases/latest)的静态资源中的apk，你可以跳过下面的步骤，直接在手机上[安装](https://www.lifewire.com/install-apk-on-android-4177185)即可。注意，该apk是用调试密钥签名的。
+- 打开Android Studio，选择*打开一个现有的Android Studio项目*。
+- 选择OpenBot/android目录，点击确定。
+- 如果需要的话，确认Gradle Sync。
+- 连接你的Android设备，并确保在[开发者选项](https://developer.android.com/studio/debug/dev-options)中启用USB调试。根据你的开发环境，[进一步的步骤](https://developer.android.com/studio/run/device)可能是必要的。
+- 单击"运行"按钮（绿色箭头）或从顶部菜单中选择 "运行">"运行'安卓'"。你可能需要使用Build > Rebuild Project来重建项目。
+- 如果它要求你使用Instant Run，点击*Proceed Without Instant Run*。
 
-- [Android Studio 3.2 or later](https://developer.android.com/studio/index.html) for building and installing the apk.
-- Android device and Android development environment with minimum API 21.
-- Currently, we use API 28 as compile and target SDK. It should get installed automatically, but if not you can install the SDK manually. Go to Android Studio -> Preferences -> Appearance & Behaviour -> System Settings -> Android SDK. Make sure API 28 is checked and click apply.
+### 代码结构
+Tensorlfow Lite目标检测示例程序 [TensorFlow Lite Object Detection Android Demo](https://github.com/tensorflow/examples/tree/master/lite/examples/object_detection/android) 作为集成TFLite模型并获取相机源的起点。 Main activity 是运行主线程的[NetworkActivity](app/src/main/java/org/openbot/NetworkActivity.java)。它继承自管理摄像机和UI的[CameraActivity](app/src/main/java/org/openbot/CameraActivity.java)。[SensorService](app/src/main/java/org/openbot/SensorService.java)读取所有其他电话传感器并记录它们。[env](app/src/main/java/org/openbot/env)文件夹包含实用程序类，如[GameController](app/src/main/java/org/openbot/env/GameController.java)接口和用于声音反馈的[AudioPlayer](app/src/main/java/org/openbot/env/AudioPlayer.java)。[tflite](app/src/main/java/org/openbot/tflite)文件夹包含[Autopilot](app/src/main/java/org/openbot/tflite/Autopilot.java)和[Detector](app/src/main/java/org/openbot/tflite/Detector.java)网络的模型定义。
 
-![Android SDK](../docs/images/android_studio_sdk.jpg)
-
-#### Build process
-
-1. Open Android Studio and select *Open an existing Android Studio project*.
-2. Select the OpenBot/android directory and click OK.
-3. Confirm Gradle Sync if neccessary. To perform a Gradle Sync manually, click on the gradle icon.
-    ![Gradle Sync](../docs/images/android_studio_bar_gradle.jpg)
-4. Connect your Android device and make sure USB Debugging in the [developer options](https://developer.android.com/studio/debug/dev-options) is enabled. Depending on your development environment [further steps](https://developer.android.com/studio/run/device) might be necessary. You should see your device in the navigation bar at the top now.
-  ![Phone](../docs/images/android_studio_bar_phone.jpg)
-5. Click the Run button (the green arrow) or select Run > Run 'android' from the top menu. You may need to rebuild the project using Build > Rebuild Project.
-  ![Run](../docs/images/android_studio_bar_run.jpg)
-6. If it asks you to use Instant Run, click *Proceed Without Instant Run*.
-
-#### Code Structure
-
-The [TensorFlow Lite Object Detection Android Demo](https://github.com/tensorflow/examples/tree/master/lite/examples/object_detection/android) was used as starting point to integrate TFLite models and obtain the camera feed. The main activity is the [NetworkActivity](app/src/main/java/org/openbot/NetworkActivity.java) which runs the main thread. It inherits from the [CameraActivity](app/src/main/java/org/openbot/CameraActivity.java) which manages the camera and UI. The [SensorService](app/src/main/java/org/openbot/SensorService.java) reads all other phone sensors and logs them. The [env](app/src/main/java/org/openbot/env) folder contains utility classes such as the [GameController](app/src/main/java/org/openbot/env/GameController.java) interface and an [AudioPlayer](app/src/main/java/org/openbot/env/AudioPlayer.java) for the audible feedback. The [tflite](app/src/main/java/org/openbot/tflite) folder contains the model definitions for the [Autopilot](app/src/main/java/org/openbot/tflite/Autopilot.java) and [Detector](app/src/main/java/org/openbot/tflite/Detector.java) networks.
-
-## How to Use the App
+## 如何使用应用程序
 
 <p align="center">
   <img src="../docs/images/app_gui_1.jpg" alt="App GUI" width="49%"/>
-  <img src="../docs/images/app_gui_2.jpg" alt="App GUI" width="50%"/>
+  <img src="../docs/images/app_gui_2.jpg" alt="App GUI" width="49%"/>
 </p>
 
-### USB Connection
+### USB连接
 
-The drop-down menu is used to set the baud rate. The default is 115200 and you should not need to change this unless you mess with the Arduino firmware. The app will attempt to connect automatically, but in case you encounter issues you can use this switch to disconnect/connect.
+下拉菜单用于设置波特率。默认值是115200，你应该不需要改变这个值，除非你把Arduino固件搞乱。该应用程序将尝试自动连接，但如果你遇到问题，你可以使用这个开关来断开/连接。
 
-### Vehicle Status
+### 数据记录器
 
-The field **Battery** displays the battery voltage as measured by the Arduino via the voltage divider. The field **Speed (l,r)** reports the left and right speed of the (front) wheels in rpm. It is measured by the Arduino via the optical wheel speed sensors. The field **Sonar** shows the free space in front of the car in centimeters. It is measured by the Arduino via the ultrasonic sensor. Note, you will only receive values a few seconds after the USB connections has been established.
+有四种不同的记录模式。
 
-### Control
+- **only_sensors**。所有传感器数据，但不保存图像
+- **crop_img**: 保存所有传感器数据和具有网络输入尺寸的裁剪图像。这是默认设置，是数据收集时应该使用的设置。
+- **preview_img**: 保存所有传感器数据和全尺寸图像。这将需要大量的内存，而且速度会很慢。然而，它对于编译FPV视频是很好的。
+- **all_imgs**: 所有的传感器数据和裁剪和全尺寸的图像被保存。这将需要大量的内存，而且可能很慢。
 
-The first button is for selecting the **control mode**. Currenlty, the only control mode is **Gamepad**. In the future, it will be possible to control the robot with another smartphone, i.e. **Phone** or via **WebRTC**. 
+右边的开关是用来切换登录和关闭的。在游戏控制器上，这个开关可以用X按钮来切换。
 
-The second button is for selecting the **drive mode**. There are three different drive modes when using a game controller (e.g. PS4):
+### 驱动模式
 
-- **Game**: Use the right and left shoulder triggers (R2, L2) for forward and reverse throttle and either joystick for steering. This mode imitates the control mode of car racing video games.
-- **Joystick**: Use either one of the joysticks to control the robot.
-- **Dual**: Use the left and right joystick to control the left and right side of the car. This is raw differential steering.
+在使用游戏控制器（如PS4）时，有三种不同的驱动模式。
 
-The third button is for selecting the **speed mode**. There are three different speed modes:
+- **游戏模式**。使用左右肩部触发器（R2，L2）进行前进和后退油门，任一操纵杆进行转向。该模式模仿赛车电子游戏的控制模式。
+- **操纵杆模式**。使用任一操纵杆控制机器人。
+- **左右模式**：使用左右操纵杆控制机器人。用左右两根操纵杆分别控制汽车的左右两边 这是原始的差速转向。
 
-- **Slow**: The voltage applied to the motors is limited to 50% of the input voltage (~6V).
-- **Normal**: The voltage applied to the motors is limited to 75% of the input voltage (~9V).
-- **Fast**: There is no limit. The full input voltage will be applied to the motors at full throttle (~12V). *This is the default setting for running the neural networks.*
+右侧的开关用于在游戏控制器和网络之间切换控制。在游戏控制器上，可以使用R1触发按钮切换此开关。
 
-Running at higher speeds will reduce the lifetime of the motors but is more fun. The controls that are sent to the robot are displayed on the right side.
+### 车辆控制
 
-### Data Log
+有三种不同的速度。
 
-There are four different logging modes:
+- **慢速**：电机所承受的电压被限制在输入电压的50%（约6V）。
+- **正常**：电机所承受的电压被限制在输入电压的75%以内(约9V)。
+- **快速**：没有限制。全输入电压将应用于电机 (~12V)。*这是运行神经网络的默认设置*。
 
-- **only_sensors**: All sensor data but no images are saved.
-- **crop_img**: All sensor data and a cropped images that have the input size of the network are saved. This is the default setting and is what should be used for data collection.
-- **preview_img**: All sensor data and a full-size images are saved. This will require a lot of memory and can be slow. However, it is nice for compiling FPV videos.
-- **all_imgs**: All sensor data and both cropped and full-size images are saved. This will require a lot of memory and can be slow.
+以更高的速度运行会降低电机的寿命，但更有乐趣。从连接的游戏控制器接收到的控制或网络预测的控制显示在右侧。
 
-The switch on the right is used to toggle logging on and off. On the game controller this switch can be toggled with the X button. 
+### 模型
 
-### Camera
+该应用程序随附三种模型：
 
-The first item shows the preview resolution. The second item shows the crop resolution. This is the image that is used as input to the neural networks. You will notice that this resolution changes depending on which model you select below. If you train your own autopilot, make sure to select the `AUTOPILOT_F` model. The crop resolution should show `256x96`. The switch on the right is used to toggle between the rear and the front camera. 
+- **DETECTOR_V1_1_0_Q**。此模式用于人员跟踪。它使用MobileNet V1模型的SSD对象检测器。为了在嵌入式设备上获得更好的性能，该模型进行了量化。
+- **DETECTOR_V3_S_Q**。该模型用于人员跟踪。它使用MobileNet V3模型的SSD对象检测器。为了提高嵌入式设备的性能，该模型进行了量化。
+此模型用于自主导航。它将直接从摄像机输入预测控件。很有可能它在您的环境中不起作用。您应该按照我们的说明来训练自己的[驾驶策略](../ policy)并予以替换。
+如果一个模型处于活动状态，它的右侧将显示以[ms]为单位的推理速度。
 
-### Model
+### 设备
 
-There are three models that come with the app:
+使用下拉菜单选择运行神经网络的设备。您有以下选择。
 
-- **DETECTOR_V1_1_0_Q**: This model is used for person following. It uses a SSD object detector with MobileNet V1 backbone. The model is quantized for better performance on embedded devices.
-- **DETECTOR_V3_S_Q**: This model is used for person following. It uses a SSD object detector with MobileNet V3 backbone. The model is quantized for better performance on embedded devices.
-- **AUTOPILOT_F**: This model is used for autonomous navigation. It will predict controls directly from the camera input. Chances are that it will not work in your environment. You should follow our instructions to train your own [Driving Policy](../policy) and replace it.
+- **CPU**：使用CPU可以在大多数手机上使用，是默认选择。您可以调整线程数量以优化性能。
+- **GPU**：大多数智能手机都具有GPU。具有大量输入（例如图像）的网络通常在GPU上运行得更快。
+- **NNAPI**：这将使用[TensorFlow Lite NNAPI delegate](https://www.tensorflow.org/lite/performance/nnapi)。现代智能手机通常会配备专用的AI加速器。[神经网络API](https://developer.android.com/ndk/guides/neuralnetworks)(NNAPI)为Android设备上的TensorFlow Lite模型提供加速，这些设备具有图形处理单元(GPU)、数字信号处理器(DSP)和神经处理单元(NPU)。请注意，在一些较旧的手机上，这可能会非常慢!
 
-The switch on the right is used to turn the network on and off. When the network is running, it produces the controls for the robot and the game controller is disabled. However, you may still use the buttons on the game controller, for example to toggle this switch with the R1 trigger button to regain control of the robot. 
+## 下一步（可选）
 
-### Device
-
-Use the drop-down menu to select the device on which the neural network should be executed. You have the following choices:
-
-- **CPU**: Using the CPU works on most phones and is the default choice. You can adjust the number of threads to optimize performance. 
-- **GPU**: Most smartphones have a GPU. Networks with large inputs such as images often run faster on a GPU.
-- **NNAPI**: This will use the [TensorFlow Lite NNAPI delegate](https://www.tensorflow.org/lite/performance/nnapi). Modern smartphones often come with dedicated AI accelerators. The [Neural Network API](https://developer.android.com/ndk/guides/neuralnetworks) (NNAPI) provides acceleration for TensorFlow Lite models on Android devices with Graphics Processing Unit (GPU), Digital Signal Processor (DSP) and Neural Processing Unit (NPU). Note that on some older phones this can be very slow!
-
-If a model is active, the inference speed in [ms] will be displayed next to the device which is running the model.
-
-## Next (optional)
-
-Train your own [Driving Policy](../policy/README.md)
+训练自己的[驾驶策略](../policy/README_CN.md)
