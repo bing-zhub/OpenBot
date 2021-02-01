@@ -34,7 +34,6 @@ public class MQTTController {
 
     private static Context context;
 
-
     public void connect(Context context, String serverURI) {
         this.context = context;
         client = new MqttAndroidClient(context, "tcp://" + serverURI + ":1883", clientId);

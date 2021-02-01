@@ -167,8 +167,6 @@ public class UsbConnection {
   }
 
   private void onSerialDataReceived(String data) {
-    // Add whatever you want here
-    // TODO
     MQTTController.publishToServer(data);
     LOGGER.i("Serial data received: " + data);
     localBroadcastManager.sendBroadcast(
